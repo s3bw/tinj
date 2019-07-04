@@ -2,12 +2,6 @@
 - Provide format
 
 `[(cyan|service)]| "(message)" |(exc_info)|"(red|httpRequest.status)`
-
-- Build formatter
-- read line
-- create map
-- Parse map into line.
-- Print
 */
 package main
 
@@ -110,7 +104,7 @@ func main() {
 	}
 
 	// Help Text
-	if info.Mode()&os.ModeCharDevice != 0 || info.Size() <= 0 {
+	if info.Mode()&os.ModeCharDevice != 0 {
 		fmt.Println("The command is intended to work with pipes.")
 		fmt.Println("Usage: cat file.json | tinj")
 		return
