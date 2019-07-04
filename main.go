@@ -1,7 +1,7 @@
 /*
 - Provide format
 
-`[(cyan|service)]| "(message)" |(exc_info)|"(red|httpRequest.status)`
+`[(cyan|service)]|(blue|severity)|"(message)" |(exc_info)|"(red|httpRequest.status)`
 */
 package main
 
@@ -55,6 +55,7 @@ func CreateField(field, colour string) *Field {
 		"white": color.FgWhite,
 		"cyan":  color.FgCyan,
 		"red":   color.FgRed,
+		"blue":  color.FgBlue,
 	}
 	return &Field{
 		Key:    field,
@@ -109,7 +110,7 @@ func main() {
 		fmt.Println("Usage: cat file.json | tinj")
 		return
 	}
-	lineFormatter := DeconstructFormat(`[(cyan|service)]|"(message)"|(exc_info)|"(red|httpRequest.status)`)
+	lineFormatter := DeconstructFormat(`[(cyan|service)]|(blue|severity)|(red|httpRequest.status)|"(message)"|(exc_info)|`)
 
 	var line []rune
 	reader := bufio.NewReader(os.Stdin)
