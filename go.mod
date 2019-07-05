@@ -7,4 +7,5 @@ require (
 	github.com/go-bongo/go-dotaccess v0.0.0-20150208020959-ae070a2d2a38
 	github.com/mattn/go-colorable v0.1.2 // indirect
 	github.com/oleiade/reflections v1.0.0 // indirect
+	github.com/spf13/cobra v0.0.5
 )
