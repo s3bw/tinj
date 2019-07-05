@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"regexp"
-	"strings"
 
 	"github.com/go-bongo/go-dotaccess"
 )
@@ -12,10 +11,6 @@ import (
 const (
 	// FieldExpression to capture field names
 	FieldExpression = `\((\w*\|?\w*[\.?\w*]*)\)`
-	// ColourSeparator separates colour and field name
-	ColourSeparator = "|"
-	// DefaultColour if colour isn't provided
-	DefaultColour = "white"
 )
 
 type LineFormatter struct {
@@ -26,7 +21,7 @@ func CreateLineFormatter(fields []*Field) *LineFormatter {
 	return &LineFormatter{Fields: fields}
 }
 
-func (l *LineFormatter) Format(line []rune) {
+func (l *LineFormatter) Print(line []rune) {
 	var dict map[string]interface{}
 
 	if !isJSON(string(line)) {
@@ -37,9 +32,9 @@ func (l *LineFormatter) Format(line []rune) {
 	json.Unmarshal([]byte(string(line)), &dict)
 
 	for _, field := range l.Fields {
-		outLine, _ := dotaccess.Get(dict, field.Key)
-		if outLine != nil {
-			field.Print(outLine)
+		value, _ := dotaccess.Get(dict, field.Key)
+		if value != nil {
+			field.Print(value)
 			fmt.Print(" | ")
 		}
 	}
@@ -49,21 +44,12 @@ func (l *LineFormatter) Format(line []rune) {
 // DeconstructFormat creates a line formatter from format string
 func DeconstructFormat(format string) *LineFormatter {
 	var fields []*Field
-	var colour, key string
 
 	r, _ := regexp.Compile(FieldExpression)
 
-	for _, field := range r.FindAllString(format, -1) {
-		colour = DefaultColour
-		key = field[1 : len(field)-1]
-
-		if strings.Contains(key, ColourSeparator) {
-			arr := strings.Split(key, ColourSeparator)
-			colour, key = arr[0], arr[1]
-		}
-
-		newField := CreateField(key, colour)
-		fields = append(fields, newField)
+	for _, fieldInfo := range r.FindAllString(format, -1) {
+		field := CreateField(fieldInfo)
+		fields = append(fields, field)
 	}
 	return CreateLineFormatter(fields)
 }

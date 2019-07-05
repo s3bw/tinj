@@ -23,7 +23,7 @@ func ReadStdin(format string) {
 		line = append(line, nextChar)
 
 		if nextChar == NewLine {
-			lineFormatter.Format(line)
+			lineFormatter.Print(line)
 			line = nil
 		}
 	}

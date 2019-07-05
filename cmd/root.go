@@ -2,6 +2,8 @@
 - Provide format
 
 `[(cyan|service)]|(blue|severity)|"(message)" |(exc_info)|"(red|httpRequest.status)`
+
+Severity: INFO, WARNING, ERROR, DEBUG. Colours?
 */
 package cmd
 
@@ -14,7 +16,7 @@ import (
 )
 
 // DefaultFormat for logs
-const DefaultFormat = `[(cyan|service)]|(blue|severity)|(red|httpRequest.status)|"(message)"|(exc_info)|`
+const DefaultFormat = `[(green|service)]|(blue|severity)|(red|httpRequest.status)|"(message)"|(exc_info)|`
 
 func init() {
 	rootCmd.Flags().StringP("format", "f", "", "Supply a format string")
