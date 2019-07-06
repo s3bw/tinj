@@ -10,6 +10,14 @@
 
 Perfect for JSON structured logs.
 
+## Install
+
+```
+go install github.com/foxyblue/tinj
+```
+
+## Usage
+
 ```
 Usage:
   tinj [flags]
