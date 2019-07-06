@@ -21,3 +21,9 @@ Flags:
 ```
 
 ![example](example.png)
+
+## Testing
+
+```
+go test ./...
+```

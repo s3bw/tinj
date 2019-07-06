@@ -2,16 +2,8 @@ package tinj
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/fatih/color"
-)
-
-const (
-	// ColourSeparator separates colour and field name
-	ColourSeparator = "|"
-	// DefaultColour if colour isn't provided
-	DefaultColour = "white"
 )
 
 // Field identifies a field in a JSON to format into a log
@@ -22,8 +14,8 @@ type Field struct {
 	Colour color.Attribute
 }
 
-func CreateField(fieldSpec string) *Field {
-	var colour, key string
+// CreateField given a spec <colour>|<fieldName> or just <fieldName>
+func CreateField(key, colour string) *Field {
 	var colourTable = map[string]color.Attribute{
 		"black":   color.FgBlack,
 		"blue":    color.FgBlue,
@@ -35,21 +27,15 @@ func CreateField(fieldSpec string) *Field {
 		"white":   color.FgWhite,
 	}
 
-	colour = DefaultColour
-	key = fieldSpec[1 : len(fieldSpec)-1]
-	if strings.Contains(key, ColourSeparator) {
-		arr := strings.Split(key, ColourSeparator)
-		colour, key = arr[0], arr[1]
-	}
-
 	return &Field{
 		Key:    key,
 		Colour: colourTable[colour],
 	}
 }
 
-func (f *Field) Print(line interface{}) {
+// Print the value as per Field specification
+func (f *Field) Print(value interface{}) {
 	color.Set(f.Colour)
-	fmt.Print(line)
+	fmt.Print(value)
 	color.Unset()
 }

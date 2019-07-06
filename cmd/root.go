@@ -16,7 +16,7 @@ import (
 )
 
 // DefaultFormat for logs
-const DefaultFormat = `[(green|service)]|(blue|severity)|(red|httpRequest.status)|"(message)"|(exc_info)|`
+const DefaultFormat = `[(service|green)]|(severity|blue)|(httpRequest.status|red)|"(message)"|(exc_info)|`
 
 func init() {
 	rootCmd.Flags().StringP("format", "f", "", "Supply a format string")
