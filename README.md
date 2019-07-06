@@ -9,15 +9,13 @@
 Perfect for JSON structured logs.
 
 ```
-The command is intended to work with pipes.
-Usage: cat <file-name>.json | tinj
-
 Usage:
   tinj [flags]
 
 Flags:
-  -f, --format string   Supply a format string
-  -h, --help            help for tinj
+  -f, --format string      Supply a format string
+  -h, --help               help for tinj
+  -s, --separator string   Separate fields by supplied character
 ```
 
 ![example](example.png)
