@@ -18,9 +18,9 @@ const (
 )
 
 // ReadStdin streams lines from stdin
-func ReadStdin(format string) {
+func ReadStdin(format, separator string) {
 	fields := DeconstructFormat(format)
-	lineFormatter := CreateLineFormatter(fields)
+	lineFormatter := CreateLineFormatter(fields, separator)
 	stdin := bufio.NewReader(os.Stdin)
 
 	for {

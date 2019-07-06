@@ -15,11 +15,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// DefaultFormat for logs
-const DefaultFormat = `[(service|green)]|(severity|blue)|(httpRequest.status|red)|"(message)"|(exc_info)|`
+const (
+	// DefaultFormat for logs
+	DefaultFormat = `[(service|green)]|(severity|blue)|(httpRequest.status|red)|"(message)"|(exc_info)|`
+	// DefaultSeparator between fields
+	DefaultSeparator = ` | `
+)
 
 func init() {
 	rootCmd.Flags().StringP("format", "f", "", "Supply a format string")
+	rootCmd.Flags().StringP("separator", "s", "", "Separate fields by supplied character")
 }
 
 var rootCmd = &cobra.Command{
@@ -28,6 +33,11 @@ var rootCmd = &cobra.Command{
 		format, _ := cmd.Flags().GetString("format")
 		if format == "" {
 			format = DefaultFormat
+		}
+
+		separator, _ := cmd.Flags().GetString("separator")
+		if separator == "" {
+			separator = DefaultSeparator
 		}
 
 		info, err := os.Stdin.Stat()
@@ -41,7 +51,7 @@ var rootCmd = &cobra.Command{
 			fmt.Println("Usage: cat file.json | tinj")
 			return
 		}
-		tinj.ReadStdin(format)
+		tinj.ReadStdin(format, separator)
 	},
 }
 

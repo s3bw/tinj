@@ -7,13 +7,14 @@ import (
 	"github.com/go-bongo/go-dotaccess"
 )
 
-// Add the separator to the line formatter
+// LineFormatter turns a JSON input into a line for the command line
 type LineFormatter struct {
-	Fields []*Field
+	Fields    []*Field
+	Separator string
 }
 
-func CreateLineFormatter(fields []*Field) *LineFormatter {
-	return &LineFormatter{Fields: fields}
+func CreateLineFormatter(fields []*Field, separator string) *LineFormatter {
+	return &LineFormatter{Fields: fields, Separator: separator}
 }
 
 func (l *LineFormatter) Print(line []byte) {
@@ -30,7 +31,7 @@ func (l *LineFormatter) Print(line []byte) {
 		value, _ := dotaccess.Get(dict, field.Key)
 		if value != nil {
 			field.Print(value)
-			fmt.Print(" | ")
+			fmt.Print(l.Separator)
 		}
 	}
 	fmt.Print("\n")
