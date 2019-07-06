@@ -6,6 +6,8 @@
     Tinj adds a tinge of colour to newline delimited json streams on stdout.
 </h4>
 
+[![CircleCI](https://circleci.com/gh/foxyblue/tinj.svg?style=shield)](https://circleci.com/gh/foxyblue/tinj)
+
 Perfect for JSON structured logs.
 
 ```
