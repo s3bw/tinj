@@ -17,7 +17,7 @@ import (
 
 const (
 	// DefaultFormat for logs
-	DefaultFormat = `[(service|green)]|(severity|blue)|(httpRequest.status|red)|"(message)"|(exc_info)|`
+	DefaultFormat = `[(service|yellow)]|(severity|blue)|(httpRequest.status|red)|"(message)"|(exc_info)|`
 	// DefaultSeparator between fields
 	DefaultSeparator = ` | `
 )
@@ -55,7 +55,31 @@ var rootCmd = &cobra.Command{
 	},
 }
 
+var subCmd = &cobra.Command{
+	Use:   "count [no options!]",
+	Short: "My counter",
+	Run: func(cmd *cobra.Command, args []string) {
+		metrics := `count(httpRequest.status)`
+		separator := ` | `
+
+		info, err := os.Stdin.Stat()
+		if err != nil {
+			panic(err)
+		}
+
+		// Help Text
+		if info.Mode()&os.ModeCharDevice != 0 {
+			fmt.Println("The command is intended to work with pipes.")
+			fmt.Println("Usage: cat file.json | tinj")
+			return
+		}
+		tinj.AggregateStdin(metrics, separator)
+	},
+}
+
 func Execute() {
+	rootCmd.AddCommand(subCmd)
+
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)

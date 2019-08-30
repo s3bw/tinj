@@ -1,11 +1,43 @@
 package tinj
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
+	"os"
+	"regexp"
 
 	"github.com/go-bongo/go-dotaccess"
 )
+
+// ReadStdin streams lines from stdin
+func ReadStdin(format, separator string) {
+	fields := DeconstructFormat(format)
+	lineFormatter := CreateLineFormatter(fields, separator)
+
+	stdin := bufio.NewReader(os.Stdin)
+	for {
+		nextLine, _, err := stdin.ReadLine()
+		if err != nil {
+			break
+		}
+		lineFormatter.Print(nextLine)
+		nextLine = nil
+	}
+}
+
+// DeconstructFormat parses output format from string
+func DeconstructFormat(format string) []*Field {
+	var fields []*Field
+
+	r, _ := regexp.Compile(FieldExpression)
+	for _, fieldInfo := range r.FindAllString(format, -1) {
+		fieldKey, colour := SplitFieldInfo(fieldInfo)
+		field := CreateField(fieldKey, colour)
+		fields = append(fields, field)
+	}
+	return fields
+}
 
 // LineFormatter turns a JSON input into a line for the command line
 type LineFormatter struct {
