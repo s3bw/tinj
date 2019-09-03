@@ -66,5 +66,4 @@ func (l *LineFormatter) Print(line []byte) {
 			fmt.Print(l.Separator)
 		}
 	}
-	fmt.Print("\n")
 }

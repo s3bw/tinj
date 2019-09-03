@@ -59,7 +59,8 @@ var subCmd = &cobra.Command{
 	Use:   "count [no options!]",
 	Short: "My counter",
 	Run: func(cmd *cobra.Command, args []string) {
-		metrics := `count(httpRequest.status)`
+		// metrics := `count(httpRequest.status)`
+		metrics := `(severity|white),(httpRequest.requestMethod|white),`
 		separator := ` | `
 
 		info, err := os.Stdin.Stat()

@@ -37,33 +37,33 @@ func CreateMetric(key, colour string) *Metric {
 	}
 }
 
+// TODO: This needs to capture any type and create a string
 func (m *Metric) Count(value interface{}) {
-	v := value.(float64)
-	s := fmt.Sprintf("%.0f", v)
-	_, ok := m.counter[s]
+	v := value.(string)
+	//s := fmt.Sprintf("%.0f", v)
+	_, ok := m.counter[v]
 	if !ok {
-		m.counter[s] = 1
+		m.counter[v] = 1
 	}
-	m.counter[s]++
+	m.counter[v]++
 }
 
 // Print the value as per Field specification
 func (m *Metric) Print(value interface{}) {
-	color.Set(m.Colour)
-	// fmt.Print(m.Key)
 	var keys []string
+	red := color.New(color.FgRed).SprintFunc()
+	blue := color.New(color.FgBlue).SprintFunc()
+	// Print metric according to it's own colour 'm.Colour'
+	paint := color.New(m.Colour).SprintFunc()
 
 	for k := range m.counter {
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)
 
-	fmt.Print("\r")
+	fmt.Printf("%s:  ", blue(m.Key))
 	for _, k := range keys {
-		fmt.Printf("%s: count %d", k, m.counter[k])
-		color.Set(color.FgCyan)
-		fmt.Print(` | `)
-		color.Set(m.Colour)
+		fmt.Printf("%s: %s", paint(k), red(m.counter[k]))
+		fmt.Print(`  `)
 	}
-	color.Unset()
 }
