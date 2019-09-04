@@ -17,9 +17,11 @@ import (
 
 const (
 	// DefaultFormat for logs
-	DefaultFormat = `[(service|yellow)]|(severity|blue)|(httpRequest.status|red)|"(message)"|(exc_info)|`
+	DefaultFormat = `(service|yellow),(severity|blue),(httpRequest.status|red),(message),(exc_info)`
 	// DefaultSeparator between fields
 	DefaultSeparator = ` | `
+	// DefaultMetrics to capture when aggregating
+	DefaultMetrics = `(severity|white),(httpRequest.requestMethod|white),(httpRequest.status|green)`
 )
 
 func init() {
@@ -59,9 +61,15 @@ var subCmd = &cobra.Command{
 	Use:   "count [no options!]",
 	Short: "My counter",
 	Run: func(cmd *cobra.Command, args []string) {
-		// metrics := `count(httpRequest.status)`
-		metrics := `(severity|white),(httpRequest.requestMethod|white),`
-		separator := ` | `
+		metrics, _ := cmd.Flags().GetString("metrics")
+		if metrics == "" {
+			metrics = DefaultMetrics
+		}
+
+		separator, _ := cmd.Flags().GetString("separator")
+		if separator == "" {
+			separator = DefaultSeparator
+		}
 
 		info, err := os.Stdin.Stat()
 		if err != nil {
