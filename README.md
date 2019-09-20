@@ -30,6 +30,8 @@ Flags:
 
 ## Example
 
+### Formatting JSON
+
 From this 🧐
 
 ```bash
@@ -48,6 +50,8 @@ $ cat log_file.json | tinj
 5d8558182242931dbd4089c9 | Harvey Daniels | $3,254.41
 5d85582325447920d159e349 | Fischer Spencer | $1,439.11
 ```
+
+### Printing readable tracebacks
 
 Formats JSON values with Newline Delimiters too.
 
