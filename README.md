@@ -51,7 +51,7 @@ $ cat log_file.json | tinj
 
 Formats JSON values with Newline Delimiters too.
 
-```
+```json
 {"error":"\nErrorStatus: line 12\n    value not defined 'x'.\nSee docs for fix: sebastien-docs.info"}
 ```
 
