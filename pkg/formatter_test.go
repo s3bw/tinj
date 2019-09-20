@@ -29,7 +29,7 @@ var deconstructFormatTest = []struct {
 
 func TestDeconstructFormat(t *testing.T) {
 	for _, tt := range deconstructFormatTest {
-		result := DeconstructFormat(tt.givenFormat)
+		result := ConstructFields(tt.givenFormat)
 
 		if len(result) != len(tt.expectedFields) {
 			t.Errorf("Expected: %v, got: %v", tt.expectedFields, result)

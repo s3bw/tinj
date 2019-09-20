@@ -37,13 +37,15 @@ func CreateMetric(key, colour string) *Metric {
 	}
 }
 
+// Count value in the metric
 func (m *Metric) Count(value interface{}) {
 	str := fmt.Sprintf("%v", value)
 	_, ok := m.counter[str]
 	if !ok {
 		m.counter[str] = 1
+	} else {
+		m.counter[str]++
 	}
-	m.counter[str]++
 }
 
 // Print the value as per Field specification
