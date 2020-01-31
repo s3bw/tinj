@@ -10,12 +10,15 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	tinj "github.com/foxyblue/tinj/pkg"
 	"github.com/spf13/cobra"
 )
 
 const (
+	// DefaultStyle of logs to parse
+	DefaultStyle = `tail`
 	// DefaultFormat for logs
 	DefaultFormat = `(service|yellow),(severity|blue),(httpRequest.status|red),(message),(exc_info)`
 	// DefaultSeparator between fields
@@ -26,21 +29,36 @@ const (
 
 func init() {
 	rootCmd.Flags().StringP("format", "f", "", "Supply a format string")
-	rootCmd.Flags().StringP("separator", "s", "", "Separate fields by supplied character")
+	rootCmd.Flags().StringP("style", "s", "", "Supply a style of log")
+	rootCmd.Flags().StringP("separator", "p", "", "Separate fields by supplied character")
+}
+
+func parseFlag(cmd *cobra.Command, flag, defaultFlag string) string {
+	f, _ := cmd.Flags().GetString(flag)
+	if f == "" {
+		return defaultFlag
+	}
+	return f
+}
+
+func parseStyle(style string) (tinj.Style, error) {
+	switch strings.ToLower(style) {
+	case `tail`:
+		return tinj.Tail, nil
+	case `stern`:
+		return tinj.Stern, nil
+	case `compose`:
+		return tinj.Compose, nil
+	}
+	return tinj.Tail, fmt.Errorf("--style %q not recognised.", style)
 }
 
 var rootCmd = &cobra.Command{
 	Use: "tinj",
 	Run: func(cmd *cobra.Command, args []string) {
-		format, _ := cmd.Flags().GetString("format")
-		if format == "" {
-			format = DefaultFormat
-		}
-
-		separator, _ := cmd.Flags().GetString("separator")
-		if separator == "" {
-			separator = DefaultSeparator
-		}
+		format := parseFlag(cmd, "format", DefaultFormat)
+		separator := parseFlag(cmd, "separator", DefaultSeparator)
+		style := parseFlag(cmd, "style", DefaultStyle)
 
 		info, err := os.Stdin.Stat()
 		if err != nil {
@@ -53,7 +71,15 @@ var rootCmd = &cobra.Command{
 			fmt.Println("Usage: cat file.json | tinj")
 			return
 		}
-		tinj.ReadStdin(format, separator)
+
+		// Parse provided style flags
+		lineStyle, err := parseStyle(style)
+		if err != nil {
+			fmt.Println(err)
+			fmt.Println("Try: tail, stern or compose")
+			return
+		}
+		tinj.ReadStdin(format, separator, lineStyle)
 	},
 }
 
@@ -61,15 +87,8 @@ var subCmd = &cobra.Command{
 	Use:   "count [no options!]",
 	Short: "My counter",
 	Run: func(cmd *cobra.Command, args []string) {
-		metrics, _ := cmd.Flags().GetString("metrics")
-		if metrics == "" {
-			metrics = DefaultMetrics
-		}
-
-		separator, _ := cmd.Flags().GetString("separator")
-		if separator == "" {
-			separator = DefaultSeparator
-		}
+		metrics := parseFlag(cmd, "metrics", DefaultMetrics)
+		separator := parseFlag(cmd, "separator", DefaultSeparator)
 
 		info, err := os.Stdin.Stat()
 		if err != nil {
@@ -86,6 +105,7 @@ var subCmd = &cobra.Command{
 	},
 }
 
+// Execute runs tinj CLI
 func Execute() {
 	rootCmd.AddCommand(subCmd)
 
