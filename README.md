@@ -12,20 +12,28 @@ Perfect for JSON structured logs.
 
 ## Install
 
-```
+```bash
 go install github.com/foxyblue/tinj
 ```
 
 ## Usage
 
-```
+```bash
 Usage:
   tinj [flags]
+  tinj [command]
+
+Available Commands:
+  count       My counter
+  help        Help about any command
 
 Flags:
   -f, --format string      Supply a format string
   -h, --help               help for tinj
-  -s, --separator string   Separate fields by supplied character
+  -p, --separator string   Separate fields by supplied character
+  -s, --style string       Supply a style of log
+
+Use "tinj [command] --help" for more information about a command.
 ```
 
 ## Example
@@ -61,7 +69,7 @@ Formats JSON values with Newline Delimiters too.
 
 Becomes:
 
-```
+```python
 ErrorStatus: line 12
     value not defined 'x'.
 See docs for fix: sebastien-docs.info
@@ -69,6 +77,6 @@ See docs for fix: sebastien-docs.info
 
 ## Testing
 
-```
+```bash
 go test ./...
 ```
