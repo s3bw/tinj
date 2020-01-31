@@ -81,11 +81,13 @@ func (l *LineFormatter) Print(line []byte) {
 		return
 	}
 
-	for _, field := range l.Fields {
+	for i, field := range l.Fields {
 		value, _ := dotaccess.Get(dict, field.Key)
 		if value != nil {
+			if i != 0 {
+				fmt.Print(l.Separator)
+			}
 			field.Print(value)
-			fmt.Print(l.Separator)
 		}
 	}
 	fmt.Print("\n")
