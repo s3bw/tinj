@@ -2,6 +2,7 @@ package tinj
 
 import (
 	"fmt"
+	"regexp"
 
 	"github.com/fatih/color"
 )
@@ -12,6 +13,19 @@ type Field struct {
 	Key string
 	// Colour specifying the colour to output the value
 	Colour color.Attribute
+}
+
+// ConstructFields parses output format from string
+func ConstructFields(format string) []*Field {
+	var fields []*Field
+
+	r, _ := regexp.Compile(FieldExpression)
+	for _, fieldInfo := range r.FindAllString(format, -1) {
+		fieldKey, colour := SplitFieldInfo(fieldInfo)
+		field := CreateField(fieldKey, colour)
+		fields = append(fields, field)
+	}
+	return fields
 }
 
 // CreateField given a spec <colour>|<fieldName> or just <fieldName>
@@ -34,8 +48,7 @@ func CreateField(key, colour string) *Field {
 }
 
 // Print the value as per Field specification
-func (f *Field) Print(value interface{}) {
-	color.Set(f.Colour)
-	fmt.Print(value)
-	color.Unset()
+func (field *Field) Print(text interface{}) {
+	apply := color.New(field.Colour).SprintFunc()
+	fmt.Printf("%s", apply(text))
 }
