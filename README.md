@@ -13,7 +13,16 @@ Perfect for JSON structured logs.
 ## Install
 
 ```bash
-go install github.com/foxyblue/tinj
+go get github.com/foxyblue/tinj
+```
+
+Ensure it has been installed correctly by running `tinj`
+you should see the following output:
+
+```bash
+$ tinj
+The command is intended to work with pipes.
+Usage: cat file.json | tinj
 ```
 
 ## Usage
