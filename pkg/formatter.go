@@ -48,7 +48,7 @@ func CreateLineFormatter(fields []*Field, separator string, style Style) *LineFo
 }
 
 // ReadStdin streams lines from stdin
-func ReadStdin(format, separator string, style Style) {
+func ReadStdin(format, separator string, style Style, trim int) {
 	fields := ConstructFields(format)
 	lineFormatter := CreateLineFormatter(fields, separator, style)
 
@@ -59,14 +59,14 @@ func ReadStdin(format, separator string, style Style) {
 			// Exit? Exit on interrupt!
 			break
 		}
-		lineFormatter.Print(nextLine)
+		lineFormatter.Print(nextLine, trim)
 		nextLine = nil
 	}
 }
 
 // Print line with new format
-func (l *LineFormatter) Print(line []byte) {
-	prefix, line := l.normPrefix(line)
+func (l *LineFormatter) Print(line []byte, trim int) {
+	prefix, line := l.normPrefix(line, trim)
 	if prefix != nil {
 		colour := determineColor(prefix)
 		fmt.Printf("%v", colour(string(prefix)))
@@ -93,7 +93,8 @@ func (l *LineFormatter) Print(line []byte) {
 	fmt.Print("\n")
 }
 
-func (l *LineFormatter) normPrefix(line []byte) ([]byte, []byte) {
+func (l *LineFormatter) normPrefix(line []byte, trim int) ([]byte, []byte) {
+	line = line[trim:]
 	if (len(line) > 0) && (line[0] != '{') {
 		switch l.Style {
 		case Tail:
