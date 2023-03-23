@@ -25,8 +25,6 @@ const (
 	DefaultSeparator = ` | `
 	// DefaultMetrics to capture when aggregating
 	DefaultMetrics = `(severity|white),(httpRequest.requestMethod|white),(httpRequest.status|green)`
-	// DefaultTrim is set to zero
-	DefaultTrim = "0"
 )
 
 func init() {
