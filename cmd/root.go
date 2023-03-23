@@ -25,12 +25,15 @@ const (
 	DefaultSeparator = ` | `
 	// DefaultMetrics to capture when aggregating
 	DefaultMetrics = `(severity|white),(httpRequest.requestMethod|white),(httpRequest.status|green)`
+	// DefaultTrim is set to zero
+	DefaultTrim = "0"
 )
 
 func init() {
 	rootCmd.Flags().StringP("format", "f", "", "Supply a format string")
 	rootCmd.Flags().StringP("style", "s", "", "Supply a style of log")
 	rootCmd.Flags().StringP("separator", "p", "", "Separate fields by supplied character")
+	rootCmd.Flags().Int("trim", 0, "Supply an integer")
 }
 
 func parseFlag(cmd *cobra.Command, flag, defaultFlag string) string {
@@ -50,7 +53,7 @@ func parseStyle(style string) (tinj.Style, error) {
 	case `compose`:
 		return tinj.Compose, nil
 	}
-	return tinj.Tail, fmt.Errorf("--style %q not recognised.", style)
+	return tinj.Tail, fmt.Errorf("--style %q not recognised", style)
 }
 
 var rootCmd = &cobra.Command{
@@ -58,6 +61,7 @@ var rootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		format := parseFlag(cmd, "format", DefaultFormat)
 		separator := parseFlag(cmd, "separator", DefaultSeparator)
+		trim, _ := cmd.Flags().GetInt("trim")
 		style := parseFlag(cmd, "style", DefaultStyle)
 
 		info, err := os.Stdin.Stat()
@@ -79,7 +83,7 @@ var rootCmd = &cobra.Command{
 			fmt.Println("Try: tail, stern or compose")
 			return
 		}
-		tinj.ReadStdin(format, separator, lineStyle)
+		tinj.ReadStdin(format, separator, lineStyle, trim)
 	},
 }
 
@@ -98,7 +102,7 @@ var subCmd = &cobra.Command{
 		// Help Text
 		if info.Mode()&os.ModeCharDevice != 0 {
 			fmt.Println("The command is intended to work with pipes.")
-			fmt.Println("Usage: cat file.json | tinj")
+			fmt.Println("Usage: cat file.json | tinj count")
 			return
 		}
 		tinj.AggregateStdin(metrics, separator)
