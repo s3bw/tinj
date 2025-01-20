@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/foxyblue/tinj/cmd"
+	"github.com/s3bw/tinj/cmd"
 )
 
 func main() {

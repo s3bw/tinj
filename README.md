@@ -6,14 +6,14 @@
     Tinj adds a tinge of colour to newline delimited json streams on stdout.
 </h4>
 
-[![CircleCI](https://circleci.com/gh/foxyblue/tinj.svg?style=shield)](https://circleci.com/gh/foxyblue/tinj)
+[![CircleCI](https://circleci.com/gh/s3bw/tinj.svg?style=shield)](https://circleci.com/gh/s3bw/tinj)
 
 Perfect for JSON structured logs.
 
 ## Install
 
 ```bash
-go get github.com/foxyblue/tinj
+go install github.com/s3bw/tinj@latest
 ```
 
 Ensure it has been installed correctly by running `tinj`

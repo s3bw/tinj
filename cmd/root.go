@@ -1,4 +1,5 @@
-/*Package cmd provides and interface to tinj cli.
+/*
+Package cmd provides and interface to tinj cli.
 - Provide format
 
 `[(cyan|service)]|(blue|severity)|"(message)" |(exc_info)|"(red|httpRequest.status)`
@@ -12,7 +13,7 @@ import (
 	"os"
 	"strings"
 
-	tinj "github.com/foxyblue/tinj/pkg"
+	tinj "github.com/s3bw/tinj/pkg"
 	"github.com/spf13/cobra"
 )
 
